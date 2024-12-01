@@ -24,5 +24,18 @@ let part1 =
   let sum = List.fold_left (+) 0 sums in
   string_of_int sum
 
-let () = print_endline part1
+let part2 =
+  let s = read_whole_file file in
+  let pairs = String.split_on_char '\n' s in
+  let trimmed = List.map (fun x -> Str.global_replace (Str.regexp "   ") "," x) pairs in
+  let firstMembers = List.map (fun x -> Str.string_before x ((String.index_from x 0 ','))  ) trimmed in
+  let secondMembers = List.map (fun x -> Str.string_after x ((String.index_from x 0 ',') + 1)  ) trimmed in
+  let similarity_scores = List.map (fun x ->
+    let matches = List.filter (fun y -> y = x) secondMembers in
+    List.length matches * (int_of_string x)
+  ) firstMembers
+  in similarity_scores
+
+
+let () = print_endline "part1: "; print_endline part1 ; print_endline "part2: "; print_endline (string_of_int (List.fold_left (+) 0 part2))
     
