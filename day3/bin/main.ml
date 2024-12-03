@@ -6,6 +6,26 @@ let read_whole_file filename =
     close_in ch;
     s
 
+let evaluate_instructions instructions =
+  let rec evaluate_instructions' instructions skip acc =
+    match instructions with
+    | [] -> acc
+    | x :: xs -> 
+        match x with
+        | "don't()" -> evaluate_instructions' xs true acc
+        | "do()" -> evaluate_instructions' xs false acc
+        | _ -> 
+          if skip then
+            evaluate_instructions' xs true acc
+          else
+            let reg = Str.regexp "mul(\\([0-9]+\\),\\([0-9]+\\))" in
+            let _ = Str.search_forward reg x 0 in
+            let a = int_of_string (Str.matched_group 1 x) in
+            let b = int_of_string (Str.matched_group 2 x) in
+            evaluate_instructions' xs false (acc + (a * b))
+  in
+  evaluate_instructions' instructions false 0
+
 let part1 = 
     let input = read_whole_file file in
     let lines = String.split_on_char '\n' input in
@@ -24,4 +44,20 @@ let part1 =
     in
     let mul = extract_mul full_row 0 in
     mul
-let () = print_int part1; print_newline ()
+let part2 = 
+  let input = read_whole_file file in
+  let lines = String.split_on_char '\n' input in
+  let full_row = List.fold_left (fun acc x -> acc ^ x) "" lines in
+  let valid_instructions = Str.regexp "\\(don't()\\|do()\\|mul([0-9]+,[0-9]+)\\)" in
+  let rec parse_instructions row start =
+    try
+      let _ = Str.search_forward valid_instructions row start in
+      let matched = Str.matched_string row in
+      matched :: parse_instructions row (Str.match_end ())
+    with Not_found -> []
+  in 
+  let instructions = parse_instructions full_row 0 in
+  let anser = evaluate_instructions instructions in
+  anser
+
+let () = print_int part1; print_newline (); print_int part2; print_newline ()
