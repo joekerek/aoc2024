@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const input = fs.readFileSync('./input.txt', 'utf8').split('\n').filter(Boolean);
+const input = fs.readFileSync('./input', 'utf8').split('\n').filter(Boolean);
 const rows = input.length;
 const cols = input[0].length;
 const matrix = input.map(row => row.split(''));
@@ -129,31 +129,25 @@ for (const visistedNode of [...visitedNodes].slice(0, 1)) {
       !isBlocked && (matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '<');
     }
 
-    if (isBlocked || hasHit) {
-      if (isBlocked && hasHit) {
-        hasLooped = false;
-        break;
+    if (isBlocked) {
+      if (direction === 'up') {
+        guardPositionCopy.x++;
+        matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '>';
       }
-      if (!hasHit) {
-        if (direction === 'up') {
-          guardPositionCopy.x++;
-          matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '>';
-        }
-        if (direction === 'right') {
-          guardPositionCopy.y--;
-          matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = 'v';
-        }
-        if (direction === 'down') {
-          guardPositionCopy.x--;
-          matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '<';
-        }
-        if (direction === 'left') {
-          guardPositionCopy.y++;
-          matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '^';
-        }
+      if (direction === 'right') {
+        guardPositionCopy.y--;
+        matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = 'v';
       }
-      hasLooped = visits.has(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
+      if (direction === 'down') {
+        guardPositionCopy.x--;
+        matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '<';
+      }
+      if (direction === 'left') {
+        guardPositionCopy.y++;
+        matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '^';
+      }
     }
+    hasLooped = visits.has(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
     visits.add(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
   }
   if (hasLooped) {
