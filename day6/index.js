@@ -84,7 +84,7 @@ while (!isAtEdge(guardPositionCopy.x, guardPositionCopy.y)) {
 }
 
 let loopCount = 0;
-for (const visistedNode of [...visitedNodes].slice(0, 1)) {
+for (const visistedNode of visitedNodes) {
   const [x, y] = visistedNode.split(',');
   let xCopy = parseInt(x);
   let yCopy = parseInt(y);
