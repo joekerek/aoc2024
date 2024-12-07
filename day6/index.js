@@ -100,6 +100,8 @@ for (const visistedNode of visitedNodes) {
   while(!hasLooped && !isAtEdge(guardPositionCopy.x, guardPositionCopy.y)) {
     let direction = determineDirection(matrixCopy[guardPositionCopy.x][guardPositionCopy.y]);
     const {hasHit, nextDirection} = checkWall(direction, guardPositionCopy.x, guardPositionCopy.y);
+    hasLooped = visits.has(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
+    visits.add(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
     if (hasHit) {
       direction = nextDirection;
     }
@@ -147,8 +149,6 @@ for (const visistedNode of visitedNodes) {
         matrixCopy[guardPositionCopy.x][guardPositionCopy.y] = '^';
       }
     }
-    hasLooped = visits.has(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
-    visits.add(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
   }
   if (hasLooped) {
     loopCount++;
