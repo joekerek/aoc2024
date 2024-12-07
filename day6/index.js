@@ -33,16 +33,16 @@ const determineDirection = (guard) => {
 
 const checkWall = (direction, x, y) => {
   if (direction === 'up') {
-    return {hasHit: matrix[x -1][y] === '#', nextDirection: 'right'};
+    return { hasHit: matrix[x - 1][y] === '#', nextDirection: 'right' };
   }
   if (direction === 'right') {
-    return {hasHit: matrix[x][y + 1] === '#', nextDirection: 'down'};
+    return { hasHit: matrix[x][y + 1] === '#', nextDirection: 'down' };
   }
   if (direction === 'down') {
-    return {hasHit: matrix[x + 1][y] === '#', nextDirection: 'left'};
+    return { hasHit: matrix[x + 1][y] === '#', nextDirection: 'left' };
   }
   if (direction === 'left') {
-    return {hasHit: matrix[x][y - 1] === '#', nextDirection: 'up'};
+    return { hasHit: matrix[x][y - 1] === '#', nextDirection: 'up' };
   }
 }
 
@@ -51,9 +51,9 @@ const visitedNodes = new Set();
 const graph = [];
 const copy = matrix.map(row => row.slice());
 const guardPositionCopy = { ...guardPosition };
-while(!isAtEdge(guardPositionCopy.x, guardPositionCopy.y)) {
+while (!isAtEdge(guardPositionCopy.x, guardPositionCopy.y)) {
   let direction = determineDirection(copy[guardPositionCopy.x][guardPositionCopy.y]);
-  const {hasHit, nextDirection} = checkWall(direction, guardPositionCopy.x, guardPositionCopy.y);
+  const { hasHit, nextDirection } = checkWall(direction, guardPositionCopy.x, guardPositionCopy.y);
   if (hasHit) {
     direction = nextDirection;
   }
@@ -84,7 +84,7 @@ while(!isAtEdge(guardPositionCopy.x, guardPositionCopy.y)) {
 }
 
 let loopCount = 0;
-for(const visistedNode of [...visitedNodes].slice(0,1)) {
+for (const visistedNode of [...visitedNodes].slice(0, 1)) {
   const [x, y] = visistedNode.split(',');
   let xCopy = parseInt(x);
   let yCopy = parseInt(y);
@@ -156,7 +156,7 @@ for(const visistedNode of [...visitedNodes].slice(0,1)) {
     }
     visits.add(`${guardPositionCopy.x},${guardPositionCopy.y},${matrixCopy[guardPositionCopy.x][guardPositionCopy.y]}`);
   }
-  if(hasLooped) {
+  if (hasLooped) {
     loopCount++;
   }
 }
